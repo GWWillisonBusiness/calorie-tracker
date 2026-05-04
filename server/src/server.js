@@ -6,7 +6,6 @@ require("dotenv").config();
 const app = express();
 const foodRoutes = require("./routes/foodRoutes");
 
-
 // Middleware
 app.use(cors());
 app.use(express.json());
