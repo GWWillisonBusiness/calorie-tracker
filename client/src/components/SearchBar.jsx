@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
+  const [searchedFoodInfo, setSearchedFoodInfo] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -11,7 +12,9 @@ const SearchBar = () => {
         `http://localhost:5000/api/foods/search?q=${query}`,
       );
 
-      const data = response.json(); //stores the json data we made from cleanedData in the backend
+      //Set searchedFood Values
+      const data = await response.json();
+      setSearchedFoodInfo(data);
     } catch (error) {
       console.error("Error attempting to fetch:", error);
     }
@@ -25,6 +28,14 @@ const SearchBar = () => {
         placeholder="Search for foods..."
       />
       <button type="submit">Search</button>
+      {searchedFoodInfo && (
+        <p>
+          {searchedFoodInfo.name.charAt(0).toUpperCase() +
+            searchedFoodInfo.name.slice(1).toLowerCase()}
+        </p>
+      )}
+      {searchedFoodInfo && <p>{searchedFoodInfo.calories} Calories</p>}
+      {searchedFoodInfo && <p>Serving Size: {searchedFoodInfo.servingSize}{searchedFoodInfo.servingSizeUnits} </p>}
     </form>
   );
 };

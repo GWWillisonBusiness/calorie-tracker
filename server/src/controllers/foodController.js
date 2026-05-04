@@ -14,6 +14,12 @@ const searchFood = async (req, res) => {
       },
     );
 
+    // Check that food actually exist in database
+    if (response.data.foods[0] == null) {
+      console.log("Error Food Doesn't Exist");
+      return;
+    }
+
     // Returns Array of Name, Calories, Serving Size, and the Unit for the Serving Size
     const cleanedData = {
       name: response.data.foods[0].description,
@@ -28,12 +34,10 @@ const searchFood = async (req, res) => {
     //Finds where the calorie value is located
     for (let i = 0; i < response.data.foods[0].foodNutrients.length; i++) {
       if (response.data.foods[0].foodNutrients[i].nutrientName === "Energy") {
-        cleanedData.calories =
-          response.data.foods[0].foodNutrients[i].value;
+        cleanedData.calories = response.data.foods[0].foodNutrients[i].value;
       }
     }
-    res.json(cleanedData)
-
+    res.json(cleanedData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch food data" });
