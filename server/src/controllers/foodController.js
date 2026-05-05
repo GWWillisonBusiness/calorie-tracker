@@ -15,7 +15,7 @@ const searchFood = async (req, res) => {
     );
 
     // Check that food actually exist in database
-    if (response.data.foods[0] == null) {
+    if (response.data === null) {
       console.log("Error: Food Doesn't Exist");
       return;
     }

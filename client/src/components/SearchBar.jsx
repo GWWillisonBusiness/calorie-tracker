@@ -4,6 +4,7 @@ const SearchBar = ({
   searchedFoodInfo,
   setSearchedFoodInfo,
   setDidUserFindFood,
+  didUserFindFood,
 }) => {
   const [query, setQuery] = useState("");
   const [didUserSearch, setDidUserSearch] = useState(false);
@@ -11,8 +12,7 @@ const SearchBar = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     //Search Logic
-    setDidUserSearch(true);
-    setDidUserFindFood(false);
+    setDidUserSearch(true); //user attemps to look for food
     try {
       const response = await fetch(
         `http://localhost:5000/api/foods/search?q=${query}`,
@@ -20,9 +20,9 @@ const SearchBar = ({
 
       //Set searchedFood Values
       const data = await response.json();
-      setSearchedFoodInfo(data);
-      setDidUserFindFood(true);
-      setDidUserSearch(false);
+      setDidUserFindFood(data.name); //if the data has a name set it to true
+
+      setSearchedFoodInfo(data); //set data to foodInfo, even if no food is returned
     } catch (error) {
       console.error("Error attempting to fetch:", error);
     }
@@ -38,7 +38,7 @@ const SearchBar = ({
         />
         <button type="submit">Search</button>
       </form>
-      {didUserSearch && !searchedFoodInfo && <p>Food Not Found</p>}
+      {!didUserFindFood && didUserSearch && <p>Food Not Found</p>}
     </div>
   );
 };
