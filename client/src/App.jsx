@@ -2,6 +2,7 @@ import { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import FoodResultCard from "./components/FoodResultCard";
 import DailyTracker from "./components/DailyTracker";
+import LoginCard from "./components/LoginCard";
 
 function App() {
   const [searchedFoodInfo, setSearchedFoodInfo] = useState(null);
@@ -9,10 +10,18 @@ function App() {
   const [dailyCalories, setDailyCalories] = useState(0);
   const [totalCalories, setTotalCalories] = useState(0);
   const [foodEntries, setFoodEntries] = useState([]);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div>
-      <h1>Hello World! Frontend</h1>
+      <h1>Calorie Tracker</h1>
+      <LoginCard
+        accountNumber={accountNumber}
+        setAccountNumber={setAccountNumber}
+        isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn}
+      />
       <DailyTracker
         dailyCalories={dailyCalories}
         setDailyCalories={setDailyCalories}
