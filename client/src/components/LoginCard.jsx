@@ -41,7 +41,7 @@ const LoginCard = ({
               <input
                 type="number"
                 name="accountNumber"
-                min="0"
+                min="1"
                 step="1"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}

@@ -3,8 +3,11 @@ import SearchBar from "./components/SearchBar";
 import FoodResultCard from "./components/FoodResultCard";
 import DailyTracker from "./components/DailyTracker";
 import LoginCard from "./components/LoginCard";
+import FoodOptionsList from "./components/FoodOptionsList";
 
 function App() {
+  const [foodOptions, setFoodOptions] = useState([]);
+  const [selectedFood, setSelectedFood] = useState(null);
   const [searchedFoodInfo, setSearchedFoodInfo] = useState(null);
   const [didUserFindFood, setDidUserFindFood] = useState(false);
   const [dailyCalories, setDailyCalories] = useState(0);
@@ -33,13 +36,18 @@ function App() {
       />
       <h2>Search Bar</h2>
       <SearchBar
-        searchedFoodInfo={searchedFoodInfo}
-        setSearchedFoodInfo={setSearchedFoodInfo}
-        didUserFindFood={didUserFindFood}
+        setFoodOptions={setFoodOptions}
+        setSelectedFood={setSelectedFood}
         setDidUserFindFood={setDidUserFindFood}
+        didUserFindFood={didUserFindFood}
+      />
+      <FoodOptionsList
+        foodOptions={foodOptions}
+        setSelectedFood={setSelectedFood}
+        setFoodOptions={setFoodOptions}
       />
       <FoodResultCard
-        searchedFoodInfo={searchedFoodInfo}
+        searchedFoodInfo={selectedFood}
         didUserFindFood={didUserFindFood}
         dailyCalories={dailyCalories}
         setDailyCalories={setDailyCalories}

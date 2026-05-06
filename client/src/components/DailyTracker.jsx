@@ -15,7 +15,7 @@ function DailyTracker({
         <h5>Food Eaten Today:</h5>
         {foodEntries.map((food, index) => (
           <div key={index}>
-            <strong>{food.name}</strong> — {Math.round(food.calories)} cal (
+            {food.name} — {Math.round(food.calories)} cal (
             {Math.round(food.amount)}g)
           </div>
         ))}

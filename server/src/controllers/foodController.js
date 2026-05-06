@@ -15,29 +15,31 @@ const searchFood = async (req, res) => {
       },
     );
 
-    // Check that food actually exist in database
-    if (response.data === null) {
-      console.log("Error: Food Doesn't Exist");
-      return;
+    const foods = response.data.foods;
+
+    if (!foods || foods.length === 0) {
+      return res.json([]);
     }
 
-    // Returns Array of Name, Calories, Serving Size, and the Unit for the Serving Size
-    const cleanedData = {
-      name: response.data.foods[0].description,
-      calories: null,
-      servingSize: response.data.foods[0].servingSize,
-      servingSizeUnits: response.data.foods[0].servingSizeUnit,
-      commonServingSizeUnits: response.data.foods[0].householdServingFullText,
-    };
+    const cleanedData = foods.slice(0, 10).map((food) => {
+      let calories = null;
 
-    //res.json(response.data.foods[0]);
-
-    //Finds where the calorie value is located
-    for (let i = 0; i < response.data.foods[0].foodNutrients.length; i++) {
-      if (response.data.foods[0].foodNutrients[i].nutrientName === "Energy") {
-        cleanedData.calories = response.data.foods[0].foodNutrients[i].value;
+      for (let i = 0; i < food.foodNutrients.length; i++) {
+        if (food.foodNutrients[i].nutrientName === "Energy") {
+          calories = food.foodNutrients[i].value;
+        }
       }
-    }
+
+      return {
+        fdcId: food.fdcId,
+        name: food.description,
+        calories: calories,
+        servingSize: food.servingSize || 100,
+        servingSizeUnits: food.servingSizeUnit || "g",
+        commonServingSizeUnits: food.householdServingFullText,
+      };
+    });
+
     res.json(cleanedData);
   } catch (error) {
     console.error(error);
