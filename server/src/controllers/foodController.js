@@ -71,7 +71,13 @@ const getFoodEntriesByAccount = async (req, res) => {
 
     const result = await pool.query(
       `
-      SELECT *
+      SELECT
+      id,
+      account_number AS "accountNumber",
+      food_name AS name,
+      calories,
+      amount,
+      created_at AS "createdAt"
       FROM food_entries
       WHERE account_number = $1
       ORDER BY created_at DESC
