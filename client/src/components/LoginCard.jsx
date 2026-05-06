@@ -5,11 +5,28 @@ const LoginCard = ({
   setAccountNumber,
   isLoggedIn,
   setIsLoggedIn,
+  setFoodEntries,
+  setDailyCalories,
 }) => {
-  const handleSubmit = (e) => {
+  const  handleLogin = async (e) => {
     e.preventDefault();
 
     setIsLoggedIn(true);
+
+    //Grab users food that they've already added
+    const response = await fetch(
+    `http://localhost:5000/api/foods/entries/${accountNumber}`
+    );
+
+    const data = await response.json();
+
+    setFoodEntries(data);
+
+    const totalCalories = data.reduce((sum, food) => {
+      return sum + Number(food.calories);
+    }, 0);
+
+    setDailyCalories(totalCalories);
   };
 
   return (
@@ -18,7 +35,7 @@ const LoginCard = ({
         <div className="login-card">
           <h2>Login</h2>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <label>
               Account Number
               <input

@@ -21,6 +21,8 @@ function App() {
         setAccountNumber={setAccountNumber}
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
+        setFoodEntries={setFoodEntries}
+        setDailyCalories={setDailyCalories}
       />
       <DailyTracker
         dailyCalories={dailyCalories}
@@ -43,6 +45,7 @@ function App() {
         setDailyCalories={setDailyCalories}
         foodEntries={foodEntries}
         setFoodEntries={setFoodEntries}
+        accountNumber={accountNumber}
       />
     </div>
   );
