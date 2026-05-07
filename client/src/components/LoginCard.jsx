@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const LoginCard = ({
-  token,
   setToken,
   user,
   setUser,
@@ -75,9 +74,12 @@ const LoginCard = ({
     <div className="login-card">
       {!isLoggedIn ? (
         <>
-          <h2>{authMode === "login" ? "Login" : "Sign Up"}</h2>
+          <div className="card-heading">
+            <p className="eyebrow">Account</p>
+            <h2>{authMode === "login" ? "Login" : "Sign Up"}</h2>
+          </div>
 
-          <form onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit}>
             <label>
               Email
               <input
@@ -102,6 +104,7 @@ const LoginCard = ({
           </form>
 
           <button
+            className="link-button"
             type="button"
             onClick={() =>
               setAuthMode(authMode === "login" ? "signup" : "login")
@@ -114,8 +117,13 @@ const LoginCard = ({
         </>
       ) : (
         <>
-          <h2>Logged in as: {user?.email || "User"}</h2>
-          <button type="button" onClick={handleLogout}>
+          <p className="eyebrow">Signed in</p>
+          <h2>{user?.email || "User"}</h2>
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={handleLogout}
+          >
             Logout
           </button>
         </>

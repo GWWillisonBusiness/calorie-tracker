@@ -16,46 +16,66 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   return (
-    <div>
-      <h1>Calorie Tracker</h1>
+    <div className="app-shell">
+      <header className="app-header">
+        <div>
+          <p className="eyebrow">Nutrition made simple</p>
+          <h1>Calorie Tracker</h1>
+          <p className="header-copy">
+            Search foods, choose the right serving, and keep your daily total
+            organized.
+          </p>
+        </div>
 
-      <LoginCard
-        token={token}
-        setToken={setToken}
-        user={user}
-        setUser={setUser}
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-        setFoodEntries={setFoodEntries}
-        setDailyCalories={setDailyCalories}
-      />
+        <LoginCard
+          token={token}
+          setToken={setToken}
+          user={user}
+          setUser={setUser}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          setFoodEntries={setFoodEntries}
+          setDailyCalories={setDailyCalories}
+        />
+      </header>
 
-      <DailyTracker dailyCalories={dailyCalories} foodEntries={foodEntries} />
+      <main className="app-layout">
+        <section className="search-panel">
+          <div className="section-heading">
+            <p className="eyebrow">Food search</p>
+            <h2>Find your next entry</h2>
+          </div>
 
-      <h2>Search Bar</h2>
+          <SearchBar
+            setFoodOptions={setFoodOptions}
+            setSelectedFood={setSelectedFood}
+            setDidUserFindFood={setDidUserFindFood}
+            didUserFindFood={didUserFindFood}
+          />
 
-      <SearchBar
-        setFoodOptions={setFoodOptions}
-        setSelectedFood={setSelectedFood}
-        setDidUserFindFood={setDidUserFindFood}
-        didUserFindFood={didUserFindFood}
-      />
+          <FoodOptionsList
+            foodOptions={foodOptions}
+            setSelectedFood={setSelectedFood}
+            setFoodOptions={setFoodOptions}
+          />
 
-      <FoodOptionsList
-        foodOptions={foodOptions}
-        setSelectedFood={setSelectedFood}
-        setFoodOptions={setFoodOptions}
-      />
+          <FoodResultCard
+            searchedFoodInfo={selectedFood}
+            didUserFindFood={didUserFindFood}
+            dailyCalories={dailyCalories}
+            setDailyCalories={setDailyCalories}
+            setFoodEntries={setFoodEntries}
+            token={token}
+          />
+        </section>
 
-      <FoodResultCard
-        searchedFoodInfo={selectedFood}
-        didUserFindFood={didUserFindFood}
-        dailyCalories={dailyCalories}
-        setDailyCalories={setDailyCalories}
-        foodEntries={foodEntries}
-        setFoodEntries={setFoodEntries}
-        token={token}
-      />
+        <section className="tracker-panel">
+          <DailyTracker
+            dailyCalories={dailyCalories}
+            foodEntries={foodEntries}
+          />
+        </section>
+      </main>
     </div>
   );
 }

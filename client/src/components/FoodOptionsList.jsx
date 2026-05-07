@@ -1,5 +1,3 @@
-import React from "react";
-
 function FoodOptionsList({ foodOptions, setSelectedFood, setFoodOptions }) {
   if (foodOptions.length === 0) {
     return null;
@@ -11,16 +9,18 @@ function FoodOptionsList({ foodOptions, setSelectedFood, setFoodOptions }) {
 
       {foodOptions.map((food) => (
         <div key={food.fdcId} className="food-option-card">
-          <h4>{food.name}</h4>
+          <div>
+            <h4>{food.name}</h4>
 
-          <p>
-            {food.calories} calories per {food.servingSize}
-            {food.servingSizeUnits}
-          </p>
+            <p>
+              {food.calories} calories per {food.servingSize}
+              {food.servingSizeUnits}
+            </p>
 
-          {food.commonServingSizeUnits && (
-            <p>Common serving: {food.commonServingSizeUnits}</p>
-          )}
+            {food.commonServingSizeUnits && (
+              <p>Common serving: {food.commonServingSizeUnits}</p>
+            )}
+          </div>
 
           <button
             type="button"
