@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SearchBar = ({
   setFoodOptions,
@@ -30,8 +30,8 @@ const SearchBar = ({
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="search-card">
+      <form className="search-form" onSubmit={handleSubmit}>
         <input
           type="text"
           value={query}
@@ -41,7 +41,9 @@ const SearchBar = ({
         <button type="submit">Search</button>
       </form>
 
-      {!didUserFindFood && didUserSearch && <p>Food Not Found</p>}
+      {!didUserFindFood && didUserSearch && (
+        <p className="empty-state">Food not found. Try a simpler search.</p>
+      )}
     </div>
   );
 };

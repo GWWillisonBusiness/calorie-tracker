@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function FoodResultCard({
   searchedFoodInfo,
   didUserFindFood,
   dailyCalories,
   setDailyCalories,
-  foodEntries,
   setFoodEntries,
   token,
 }) {
@@ -59,8 +58,13 @@ function FoodResultCard({
 
   return (
     <div className="food-result-card">
-      {didUserFindFood && <h3>{searchedFoodInfo.name}</h3>}
-      {didUserFindFood && <p>Calories: {searchedFoodInfo.calories}</p>}
+      {didUserFindFood && (
+        <div className="card-heading">
+          <p className="eyebrow">Selected food</p>
+          <h3>{searchedFoodInfo.name}</h3>
+          <p>{searchedFoodInfo.calories} calories per serving</p>
+        </div>
+      )}
 
       <div className="food-result-input-field">
         {didUserFindFood && (
