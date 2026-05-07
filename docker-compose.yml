@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    container_name: calorie-tracker-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: calorie_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  server:
+    build: ./server
+    container_name: calorie-tracker-server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      DB_USER: postgres
+      DB_HOST: db
+      DB_NAME: calorie_tracker
+      DB_PASSWORD: password
+      DB_PORT: 5432
+    depends_on:
+      - db
+
+  client:
+    build: ./client
+    container_name: calorie-tracker-client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
