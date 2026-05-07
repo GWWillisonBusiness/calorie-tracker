@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 const LoginCard = ({
   setToken,
@@ -14,7 +15,7 @@ const LoginCard = ({
   const [authMode, setAuthMode] = useState("login");
 
   const loadFoodEntries = async (authToken) => {
-    const response = await fetch("http://localhost:5000/api/foods/entries", {
+    const response = await fetch(`${API_URL}/api/foods/entries`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -36,7 +37,7 @@ const LoginCard = ({
 
     const endpoint = authMode === "login" ? "login" : "signup";
 
-    const response = await fetch(`http://localhost:5000/api/auth/${endpoint}`, {
+    const response = await fetch(`${API_URL}/api/auth/${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
