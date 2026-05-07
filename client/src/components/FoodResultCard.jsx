@@ -7,7 +7,7 @@ function FoodResultCard({
   setDailyCalories,
   foodEntries,
   setFoodEntries,
-  accountNumber,
+  token,
 }) {
   const [userServingSize, setUserServingSize] = useState("");
 
@@ -24,32 +24,37 @@ function FoodResultCard({
   const handleAddFood = async () => {
     if (!userServingSize) return;
 
-    const caloriesForFood = Math.floor(caloriesPerGram * Number(userServingSize));
+    const caloriesForFood = Math.floor(
+      caloriesPerGram * Number(userServingSize),
+    );
 
     const newFoodEntry = {
-      accountNumber: accountNumber,
       name: searchedFoodInfo.name,
       calories: caloriesForFood,
       amount: Number(userServingSize),
     };
 
-    setDailyCalories(dailyCalories + caloriesForFood);
-
-    setFoodEntries((prev) => [...prev, newFoodEntry]);
-
     try {
-      await fetch("http://localhost:5000/api/foods/entries", {
+      const response = await fetch("http://localhost:5000/api/foods/entries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newFoodEntry),
       });
+
+      if (!response.ok) {
+        alert("You must be logged in to save food");
+        return;
+      }
+
+      setDailyCalories(dailyCalories + caloriesForFood);
+      setFoodEntries((prev) => [...prev, newFoodEntry]);
+      setUserServingSize("");
     } catch (error) {
       console.error("Error saving food entry:", error);
     }
-
-    setUserServingSize("");
   };
 
   return (

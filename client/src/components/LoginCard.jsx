@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 
 const LoginCard = ({
-  accountNumber,
-  setAccountNumber,
+  token,
+  setToken,
+  user,
+  setUser,
   isLoggedIn,
   setIsLoggedIn,
   setFoodEntries,
   setDailyCalories,
 }) => {
-  const  handleLogin = async (e) => {
-    e.preventDefault();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authMode, setAuthMode] = useState("login");
 
-    setIsLoggedIn(true);
-
-    //Grab users food that they've already added
-    const response = await fetch(
-    `http://localhost:5000/api/foods/entries/${accountNumber}`
-    );
+  const loadFoodEntries = async (authToken) => {
+    const response = await fetch("http://localhost:5000/api/foods/entries", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
     const data = await response.json();
 
@@ -29,36 +32,95 @@ const LoginCard = ({
     setDailyCalories(totalCalories);
   };
 
-  return (
-    <>
-      {!isLoggedIn && (
-        <div className="login-card">
-          <h2>Login</h2>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-          <form onSubmit={handleLogin}>
+    const endpoint = authMode === "login" ? "login" : "signup";
+
+    const response = await fetch(`http://localhost:5000/api/auth/${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Authentication failed");
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+
+    setToken(data.token);
+    setUser(data.user);
+    setIsLoggedIn(true);
+
+    await loadFoodEntries(data.token);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    setToken("");
+    setUser(null);
+    setIsLoggedIn(false);
+    setFoodEntries([]);
+    setDailyCalories(0);
+  };
+
+  return (
+    <div className="login-card">
+      {!isLoggedIn ? (
+        <>
+          <h2>{authMode === "login" ? "Login" : "Sign Up"}</h2>
+
+          <form onSubmit={handleSubmit}>
             <label>
-              Account Number
+              Email
               <input
-                type="number"
-                name="accountNumber"
-                min="1"
-                step="1"
-                value={accountNumber}
-                onChange={(e) => setAccountNumber(e.target.value)}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
 
-            <button type="submit">Sign In</button>
-          </form>
-        </div>
-      )}
+            <label>
+              Password
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </label>
 
-      {isLoggedIn && (
-        <div className="login-card">
-          <h2>Logged in As: {accountNumber}</h2>
-        </div>
+            <button type="submit">
+              {authMode === "login" ? "Login" : "Create Account"}
+            </button>
+          </form>
+
+          <button
+            type="button"
+            onClick={() =>
+              setAuthMode(authMode === "login" ? "signup" : "login")
+            }
+          >
+            {authMode === "login"
+              ? "Need an account?"
+              : "Already have an account?"}
+          </button>
+        </>
+      ) : (
+        <>
+          <h2>Logged in as: {user?.email || "User"}</h2>
+          <button type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

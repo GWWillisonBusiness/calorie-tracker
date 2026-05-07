@@ -8,44 +8,45 @@ import FoodOptionsList from "./components/FoodOptionsList";
 function App() {
   const [foodOptions, setFoodOptions] = useState([]);
   const [selectedFood, setSelectedFood] = useState(null);
-  const [searchedFoodInfo, setSearchedFoodInfo] = useState(null);
   const [didUserFindFood, setDidUserFindFood] = useState(false);
   const [dailyCalories, setDailyCalories] = useState(0);
-  const [totalCalories, setTotalCalories] = useState(0);
   const [foodEntries, setFoodEntries] = useState([]);
-  const [accountNumber, setAccountNumber] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   return (
     <div>
       <h1>Calorie Tracker</h1>
+
       <LoginCard
-        accountNumber={accountNumber}
-        setAccountNumber={setAccountNumber}
+        token={token}
+        setToken={setToken}
+        user={user}
+        setUser={setUser}
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         setFoodEntries={setFoodEntries}
         setDailyCalories={setDailyCalories}
       />
-      <DailyTracker
-        dailyCalories={dailyCalories}
-        setDailyCalories={setDailyCalories}
-        totalCalories={totalCalories}
-        setTotalCalories={setTotalCalories}
-        foodEntries={foodEntries}
-      />
+
+      <DailyTracker dailyCalories={dailyCalories} foodEntries={foodEntries} />
+
       <h2>Search Bar</h2>
+
       <SearchBar
         setFoodOptions={setFoodOptions}
         setSelectedFood={setSelectedFood}
         setDidUserFindFood={setDidUserFindFood}
         didUserFindFood={didUserFindFood}
       />
+
       <FoodOptionsList
         foodOptions={foodOptions}
         setSelectedFood={setSelectedFood}
         setFoodOptions={setFoodOptions}
       />
+
       <FoodResultCard
         searchedFoodInfo={selectedFood}
         didUserFindFood={didUserFindFood}
@@ -53,7 +54,7 @@ function App() {
         setDailyCalories={setDailyCalories}
         foodEntries={foodEntries}
         setFoodEntries={setFoodEntries}
-        accountNumber={accountNumber}
+        token={token}
       />
     </div>
   );

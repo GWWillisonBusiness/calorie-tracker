@@ -49,15 +49,16 @@ const searchFood = async (req, res) => {
 
 const addFoodEntry = async (req, res) => {
   try {
-    const { accountNumber, name, calories, amount } = req.body;
+    const userId = req.userId;
+    const { name, calories, amount } = req.body;
 
     await pool.query(
       `
       INSERT INTO food_entries
-      (account_number, food_name, calories, amount)
+      (user_id, food_name, calories, amount)
       VALUES ($1, $2, $3, $4)
       `,
-      [accountNumber, name, calories, amount],
+      [userId, name, calories, amount],
     );
 
     res.status(201).json({ message: "Food entry saved successfully" });
@@ -67,24 +68,24 @@ const addFoodEntry = async (req, res) => {
   }
 };
 
-const getFoodEntriesByAccount = async (req, res) => {
+const getFoodEntriesByUser = async (req, res) => {
   try {
-    const { accountNumber } = req.params;
+    const userId = req.userId;
 
     const result = await pool.query(
       `
       SELECT
-      id,
-      account_number AS "accountNumber",
-      food_name AS name,
-      calories,
-      amount,
-      created_at AS "createdAt"
+        id,
+        user_id AS "userId",
+        food_name AS name,
+        calories,
+        amount,
+        created_at AS "createdAt"
       FROM food_entries
-      WHERE account_number = $1
+      WHERE user_id = $1
       ORDER BY created_at DESC
       `,
-      [accountNumber],
+      [userId],
     );
 
     res.status(200).json(result.rows);
@@ -97,5 +98,5 @@ const getFoodEntriesByAccount = async (req, res) => {
 module.exports = {
   searchFood,
   addFoodEntry,
-  getFoodEntriesByAccount,
+  getFoodEntriesByUser,
 };
