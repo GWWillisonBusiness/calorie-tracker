@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 const SearchBar = ({
   setFoodOptions,
@@ -16,7 +17,7 @@ const SearchBar = ({
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/foods/search?q=${query}`,
+        `${API_URL}/api/foods/search?q=${query}`,
       );
 
       const data = await response.json();

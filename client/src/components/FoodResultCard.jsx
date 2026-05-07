@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 function FoodResultCard({
   searchedFoodInfo,
@@ -34,7 +35,7 @@ function FoodResultCard({
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/foods/entries", {
+      const response = await fetch(`${API_URL}/api/foods/entries`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
